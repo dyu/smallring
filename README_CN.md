@@ -81,10 +81,10 @@ assert_eq!(buf.pop(Ordering::Acquire), Some(100));
 
 ```rust
 use smallring::spsc::new;
-use std::num::NonZero;
+use std::num::NonZeroUsize;
 
 // 创建一个容量为 8 的环形缓冲区，栈容量阈值为 32
-let (mut producer, mut consumer) = new::<i32, 32>(NonZero::new(8).unwrap());
+let (mut producer, mut consumer) = new::<i32, 32>(NonZeroUsize::new(8).unwrap());
 
 // 生产者推送数据
 producer.push(42).unwrap();
@@ -213,10 +213,10 @@ fn main() {
 
 ```rust
 use smallring::spsc::new;
-use std::num::NonZero;
+use std::num::NonZeroUsize;
 
 fn main() {
-    let (mut producer, mut consumer) = new::<String, 64>(NonZero::new(16).unwrap());
+    let (mut producer, mut consumer) = new::<String, 64>(NonZeroUsize::new(16).unwrap());
     
     // 推送一些数据
     producer.push("你好".to_string()).unwrap();
@@ -236,10 +236,10 @@ fn main() {
 ```rust
 use smallring::spsc::new;
 use std::thread;
-use std::num::NonZero;
+use std::num::NonZeroUsize;
 
 fn main() {
-    let (mut producer, mut consumer) = new::<String, 64>(NonZero::new(32).unwrap());
+    let (mut producer, mut consumer) = new::<String, 64>(NonZeroUsize::new(32).unwrap());
     
     // 生产者线程
     let producer_handle = thread::spawn(move || {
@@ -278,9 +278,9 @@ fn main() {
 
 ```rust
 use smallring::spsc::{new, PushError, PopError};
-use std::num::NonZero;
+use std::num::NonZeroUsize;
 
-let (mut producer, mut consumer) = new::<i32, 32>(NonZero::new(4).unwrap());
+let (mut producer, mut consumer) = new::<i32, 32>(NonZeroUsize::new(4).unwrap());
 
 // 填满缓冲区
 for i in 0..4 {
@@ -311,9 +311,9 @@ match consumer.pop() {
 
 ```rust
 use smallring::spsc::new;
-use std::num::NonZero;
+use std::num::NonZeroUsize;
 
-let (mut producer, mut consumer) = new::<u32, 64>(NonZero::new(32).unwrap());
+let (mut producer, mut consumer) = new::<u32, 64>(NonZeroUsize::new(32).unwrap());
 
 // 一次推送多个元素（需要 T: Copy）
 let data = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
@@ -367,13 +367,13 @@ use smallring::spsc::new;
 use smallring::generic::RingBuf;
 use smallring::atomic::AtomicRingBuf;
 use std::sync::atomic::AtomicU64;
-use std::num::NonZero;
+use std::num::NonZeroUsize;
 
 // SPSC：容量 ≤ 32，使用栈存储（更快的初始化，无堆分配）
-let (prod, cons) = new::<u64, 32>(NonZero::new(16).unwrap());
+let (prod, cons) = new::<u64, 32>(NonZeroUsize::new(16).unwrap());
 
 // SPSC：容量 > 32，使用堆存储（适用于更大的缓冲区）
-let (prod, cons) = new::<u64, 32>(NonZero::new(64).unwrap());
+let (prod, cons) = new::<u64, 32>(NonZeroUsize::new(64).unwrap());
 
 // Generic：更大的栈阈值可用于更大的栈存储
 let buf: RingBuf<u64, 128, true> = RingBuf::new(100);
@@ -443,7 +443,7 @@ pub fn new<E: AtomicElement, const N: usize>(capacity: usize) -> AtomicRingBuf<E
 
 **创建环形缓冲区：**
 ```rust,ignore
-pub fn new<T, const N: usize>(capacity: NonZero<usize>) -> (Producer<T, N>, Consumer<T, N>)
+pub fn new<T, const N: usize>(capacity: NonZeroUsize<usize>) -> (Producer<T, N>, Consumer<T, N>)
 ```
 
 **Producer 方法：**

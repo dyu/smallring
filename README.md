@@ -81,10 +81,10 @@ assert_eq!(buf.pop(Ordering::Acquire), Some(100));
 
 ```rust
 use smallring::spsc::new;
-use std::num::NonZero;
+use std::num::NonZeroUsize;
 
 // Create a ring buffer with capacity 8, stack threshold 32
-let (mut producer, mut consumer) = new::<i32, 32>(NonZero::new(8).unwrap());
+let (mut producer, mut consumer) = new::<i32, 32>(NonZeroUsize::new(8).unwrap());
 
 // Producer pushes data
 producer.push(42).unwrap();
@@ -213,10 +213,10 @@ fn main() {
 
 ```rust
 use smallring::spsc::new;
-use std::num::NonZero;
+use std::num::NonZeroUsize;
 
 fn main() {
-    let (mut producer, mut consumer) = new::<String, 64>(NonZero::new(16).unwrap());
+    let (mut producer, mut consumer) = new::<String, 64>(NonZeroUsize::new(16).unwrap());
     
     // Push some data
     producer.push("Hello".to_string()).unwrap();
@@ -236,10 +236,10 @@ fn main() {
 ```rust
 use smallring::spsc::new;
 use std::thread;
-use std::num::NonZero;
+use std::num::NonZeroUsize;
 
 fn main() {
-    let (mut producer, mut consumer) = new::<String, 64>(NonZero::new(32).unwrap());
+    let (mut producer, mut consumer) = new::<String, 64>(NonZeroUsize::new(32).unwrap());
     
     // Producer thread
     let producer_handle = thread::spawn(move || {
@@ -278,9 +278,9 @@ fn main() {
 
 ```rust
 use smallring::spsc::{new, PushError, PopError};
-use std::num::NonZero;
+use std::num::NonZeroUsize;
 
-let (mut producer, mut consumer) = new::<i32, 32>(NonZero::new(4).unwrap());
+let (mut producer, mut consumer) = new::<i32, 32>(NonZeroUsize::new(4).unwrap());
 
 // Fill the buffer
 for i in 0..4 {
@@ -311,9 +311,9 @@ match consumer.pop() {
 
 ```rust
 use smallring::spsc::new;
-use std::num::NonZero;
+use std::num::NonZeroUsize;
 
-let (mut producer, mut consumer) = new::<u32, 64>(NonZero::new(32).unwrap());
+let (mut producer, mut consumer) = new::<u32, 64>(NonZeroUsize::new(32).unwrap());
 
 // Push multiple elements at once (requires T: Copy)
 let data = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
@@ -367,13 +367,13 @@ use smallring::spsc::new;
 use smallring::generic::RingBuf;
 use smallring::atomic::AtomicRingBuf;
 use std::sync::atomic::AtomicU64;
-use std::num::NonZero;
+use std::num::NonZeroUsize;
 
 // SPSC: Capacity ≤ 32, uses stack storage (faster initialization, no heap allocation)
-let (prod, cons) = new::<u64, 32>(NonZero::new(16).unwrap());
+let (prod, cons) = new::<u64, 32>(NonZeroUsize::new(16).unwrap());
 
 // SPSC: Capacity > 32, uses heap storage (suitable for larger buffers)
-let (prod, cons) = new::<u64, 32>(NonZero::new(64).unwrap());
+let (prod, cons) = new::<u64, 32>(NonZeroUsize::new(64).unwrap());
 
 // Generic: Larger stack threshold for larger stack storage
 let buf: RingBuf<u64, 128, true> = RingBuf::new(100);
@@ -443,7 +443,7 @@ pub fn new<E: AtomicElement, const N: usize>(capacity: usize) -> AtomicRingBuf<E
 
 **Creating a Ring Buffer:**
 ```rust,ignore
-pub fn new<T, const N: usize>(capacity: NonZero<usize>) -> (Producer<T, N>, Consumer<T, N>)
+pub fn new<T, const N: usize>(capacity: NonZeroUsize<usize>) -> (Producer<T, N>, Consumer<T, N>)
 ```
 
 **Producer Methods:**

@@ -1,7 +1,7 @@
 [package]
 name = "smallring"
 version = "0.2.3"
-edition = "2024"
+edition = "2021"
 authors = ["shaogme <shaog.rs@gmail.com>"]
 description = "High-performance ring buffer with automatic stack/heap optimization | 高性能环形缓冲区，支持栈/堆自动优化"
 license = "MIT OR Apache-2.0"
@@ -11,7 +11,7 @@ documentation = "https://docs.rs/smallring"
 keywords = ["spsc", "ringbuffer", "lockfree", "queue", "concurrent"]
 categories = ["concurrency", "data-structures"]
 readme = "README.md"
-rust-version = "1.87"
+#rust-version = "1.87"
 
 [dependencies]
 loom = { version = "0.7.2", features = ["futures"], optional = true }
@@ -21,7 +21,7 @@ portable-atomic-util = { version = "0.2", default-features = false, features = [
 ], optional = true }
 
 [dev-dependencies]
-criterion = { version = "0.7.0", features = ["async_tokio"] }
+criterion = { version = "0.5.1", features = ["async_tokio"] }
 rtrb = "0.3.2"
 
 [features]

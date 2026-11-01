@@ -2,12 +2,12 @@
 
 use loom::thread;
 use smallring::spsc;
-use std::num::NonZero;
+use std::num::NonZeroUsize;
 
 #[test]
 fn test_spsc_loom() {
     loom::model(|| {
-        let capacity = NonZero::new(2).unwrap();
+        let capacity = NonZeroUsize::new(2).unwrap();
         // Use N=4 (larger than capacity 2) to test Stack/FixedVec logic
         let (mut p, mut c) = spsc::new::<usize, 4>(capacity);
 
@@ -51,7 +51,7 @@ fn test_spsc_loom() {
 #[test]
 fn test_spsc_wrap_loom() {
     loom::model(|| {
-        let capacity = NonZero::new(2).unwrap();
+        let capacity = NonZeroUsize::new(2).unwrap();
         let (mut p, mut c) = spsc::new::<usize, 4>(capacity);
 
         let t1 = thread::spawn(move || {
@@ -111,7 +111,7 @@ fn test_spsc_wrap_loom() {
 #[test]
 fn test_spsc_slice_loom() {
     loom::model(|| {
-        let capacity = NonZero::new(4).unwrap();
+        let capacity = NonZeroUsize::new(4).unwrap();
         let (mut p, mut c) = spsc::new::<usize, 8>(capacity);
 
         let t1 = thread::spawn(move || {

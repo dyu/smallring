@@ -72,10 +72,10 @@
 //! // SPSC ring buffer for thread-safe communication
 //! // 用于线程安全通信的 SPSC 环形缓冲区
 //! use smallring::spsc::new;
-//! use std::num::NonZero;
+//! use std::num::NonZeroUsize;
 //! use std::thread;
 //!
-//! let (mut producer, mut consumer) = new::<i32, 32>(NonZero::new(10).unwrap());
+//! let (mut producer, mut consumer) = new::<i32, 32>(NonZeroUsize::new(10).unwrap());
 //!
 //! thread::spawn(move || {
 //!     producer.push(1).unwrap();
